@@ -7,8 +7,18 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+        'language' => 'ru-RU',
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'ru-RU',
+                ],
+            ],
+        ],
         'user' => [
-            'identityClass' => 'budyaga\users\models\User',
+            'identityClass' => 'app\modules\users\models\User',
             'enableAutoLogin' => true,
             'loginUrl' => ['/login'],
         ],
@@ -91,10 +101,14 @@ $config = [
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
             'useFileTransport' => true,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'localhost', //вставляем имя или адрес почтового сервера
+                'username' => 'noreply@bitspace.kz',
+                'password' => 'Bekbaeva5837461',
+                'port' => '25',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -111,13 +125,7 @@ $config = [
     ],
     'modules' => [
         'user' => [
-            'class' => 'budyaga\users\Module',
-            'customViews' => [
-                'login' => '@app/views/site/login'
-            ],
-            'customMailViews' => [
-                'confirmChangeEmail' => '@app/mail/confirmChangeEmail' //в этом случае вы должны создать файлы confirmChangeEmail-html.php и confirmChangeEmail-text.php в папке mail
-            ]
+            'class' => 'app\modules\users\Module',
         ],
     ],
     'params' => $params,
